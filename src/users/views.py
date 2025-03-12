@@ -16,7 +16,7 @@ async def register_user(db_session: DbSession, user: User):
             detail="Username already registered"
         )
     created_user = await crud.create_user(db=db_session, username=user.username, email=user.email, password=user.password_hash)
-    token = created_user.create_access_token()
+    token = created_user.token
     return {"user": created_user, "access_token": token}
 
 @router.get("/users/{username}", response_model=UserOut, status_code=status.HTTP_200_OK)

@@ -2,7 +2,7 @@ import bcrypt
 from datetime import datetime, timedelta
 
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, validates
 from sqlalchemy import Integer, String
 import jwt
 
@@ -21,7 +21,11 @@ class User(Base):
     email: Mapped[str] = mapped_column(String, unique=True, index=True)
 
     def check_password(self, password: str) -> bool:
-        return self.password_hash == password
+        return self.password_hash == hash_password(password)
+    
+    @validates("password_hash")
+    def validate_password_hash(self, password: str) -> str:
+        return hash_password(password)
 
     @property
     def token(self) -> dict:
