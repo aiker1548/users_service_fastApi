@@ -16,7 +16,7 @@ async def register_user(db_session: DbSession, user: UserCreate):
             detail="Username already registered"
         )
     created_user = await crud.create_user(db=db_session, username=user.username, email=user.email, password=user.password_hash)
-    return created_user.id
+    return created_user
 
 @router.get("/users/{username}", response_model=UserOut, status_code=status.HTTP_200_OK)
 async def get_user_by_name(db_session: DbSession, username: str):
@@ -28,7 +28,7 @@ async def get_user_by_name(db_session: DbSession, username: str):
         )
     return user
     
-@router.get("/users", response_model=list[UserOut], status_code=status.HTTP_200_OK)
+@router.get("/users/", response_model=list[UserOut], status_code=status.HTTP_200_OK)
 async def get_users(db_session: DbSession):
     users = await crud.get_users(db_session)
     return users.scalars().all()
