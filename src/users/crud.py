@@ -2,7 +2,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 
 from src.database.models import User
-from src.users.schemas import UserCreate
 
 async def create_user(db: AsyncSession, username: str, email: str, password: str):
     db_user = User(username=username, email=email, password_hash=password)
