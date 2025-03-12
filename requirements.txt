@@ -10,3 +10,5 @@ alembic
 sqlalchemy[asyncio]
 asyncpg
 pydantic[email]
+pyjwt 
+passlib[bcrypt]
