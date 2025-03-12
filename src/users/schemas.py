@@ -4,10 +4,10 @@ import string
 
 from pydantic import BaseModel, EmailStr, validator
 
-
+from src.users.utils import hash_password
 
 # Модель для создания пользователя
-class UserCreate(BaseModel):
+class User(BaseModel):
     username: str
     email: EmailStr
     password_hash: str
@@ -28,6 +28,7 @@ class UserOut(BaseModel):
 
     class Config:
         orm_mode = True
+
 
 class UserResponseWithToken(BaseModel):
     user: UserOut
