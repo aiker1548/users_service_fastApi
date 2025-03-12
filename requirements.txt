@@ -5,3 +5,8 @@ pyjwt
 passlib[bcrypt]
 pydantic
 pydantic_settings
+alembic 
+alembic 
+sqlalchemy[asyncio]
+asyncpg
+pydantic[email]
