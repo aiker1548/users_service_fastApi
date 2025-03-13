@@ -2,6 +2,7 @@ import secrets
 import string
 import bcrypt
 
+
 def generate_password():
     """Generates a reasonable password if none is provided."""
     alphanumeric = string.ascii_letters + string.digits
@@ -16,8 +17,5 @@ def generate_password():
     return password
 
 
-def hash_password(password: str):
-    """Generates a hashed version of the provided password."""
-    pw = bytes(password, "utf-8")
-    salt = bcrypt.gensalt()
-    return bcrypt.hashpw(pw, salt)
+def hash_password(password: str) -> bytes:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt())

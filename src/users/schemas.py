@@ -10,7 +10,7 @@ from src.users.utils import hash_password
 class User(BaseModel):
     username: str
     email: EmailStr
-    password_hash: str
+    password: str
 
     @validator("email")
     def email_required(cls, v):
