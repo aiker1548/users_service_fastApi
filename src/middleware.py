@@ -2,7 +2,8 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi import FastAPI, Request
 
 from src.database.core import AsyncSessionMaker
-
+from src.auth import verify_access_token
+from src.users.crud import get_user_by_username
 
 class DBSessionMiddleware(BaseHTTPMiddleware):
     async def dispatch(self, request: Request, call_next):
@@ -15,3 +16,20 @@ class DBSessionMiddleware(BaseHTTPMiddleware):
             await session.close()  # Закрываем сессию после запроса
 
         return response
+    
+
+class AuthMiddleWare(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        token = request.headers.get('Authorization')
+        if token and token.startswith('Bearer'):
+            token = token.split("Bearer ")[-1].strip()
+            payload = verify_access_token(token)
+            if payload and hasattr(request.state, "db"):
+                user = await get_user_by_username(request.state.db, payload.get("sub"))
+                if user:
+                    request.state.user = user
+                    request.state.token = token
+
+        return await call_next(request)
+                
+        
