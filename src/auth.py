@@ -6,7 +6,6 @@ from fastapi.security import OAuth2PasswordBearer
 
 from config import config
 
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl='/users/token')
 
 def create_access_token(data: dict, expires_delta: timedelta):
     to_encode = data.copy()
