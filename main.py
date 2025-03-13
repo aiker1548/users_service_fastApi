@@ -1,13 +1,12 @@
 from fastapi import FastAPI
 
-from src.middleware import DBSessionMiddleware, AuthMiddleWare  # Импортируй свою мидлвару
+from src.middleware import DBSessionMiddleware, AuthMiddleWare  
 from src.users.views import router as user_router
 
 app = FastAPI()
 
-# Добавляем мидлвару в приложение
-app.add_middleware(AuthMiddleWare)
-app.add_middleware(DBSessionMiddleware)
+app.add_middleware(AuthMiddleWare)      #first
+app.add_middleware(DBSessionMiddleware) #second
 
 app.include_router(user_router)
 

@@ -24,12 +24,8 @@ class AuthMiddleWare(BaseHTTPMiddleware):
         if token and token.startswith('Bearer'):
             token = token.split("Bearer ")[-1].strip()
             payload = verify_access_token(token)
-            if payload and hasattr(request.state, "db"):
-                user = await get_user_by_username(request.state.db, payload.get("sub"))
-                if user:
-                    request.state.user = user
-                    request.state.token = token
-
+            request.state.username = payload.get("sub")
+            
         return await call_next(request)
                 
         

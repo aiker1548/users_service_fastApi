@@ -44,13 +44,14 @@ async def get_users(db: AsyncSession) -> list[User]:
 #         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='User not found')
 #     return user
 
-def get_current_user(request: Request) -> User:
-    user = getattr(request.state, "user", None)  # Избегаем AttributeError
-    if user is None:
+async def get_current_user(request: Request) -> User:
+    username = getattr(request.state, "username", None)  # Избегаем AttributeError
+    if username is None:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Authentication required"
         )
+    user = await get_user_by_username(request.state.db, username)
     return user
 
 Current_user = Annotated[User, Depends(get_current_user)]

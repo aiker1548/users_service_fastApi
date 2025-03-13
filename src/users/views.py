@@ -1,6 +1,6 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 
-from src.users.schemas import User, UserOut, UserResponseWithToken, UserToken, Token
+from src.users.schemas import User, UserOut, UserResponseWithToken, UserToken
 from src.database.core import DbSession
 from src.users.crud import Current_user, get_user_by_username, get_users, create_user
 
