@@ -20,7 +20,7 @@ def create_access_token(data: dict, expires_delta: timedelta):
 
 def verify_access_token(token: str):
     try:
-        payload = jwt.decode(token, config.SECRET_KEY, algorithms=[config.ALGORITHM])
+        payload = jwt.decode(token, config.SECRET_KEY, algorithms=config.ALGORITHM) 
         return payload
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Token has expired')
@@ -28,13 +28,4 @@ def verify_access_token(token: str):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token')
     
 
-async def get_current_user(token: str = Depends(oauth2_scheme)):
-    from src.users.crud import get_user_by_username  
-    payload = verify_access_token(token)
-    if payload is None:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='Invalid token')
-    user = await get_user_by_username(payload.get('sub'))
-    if not user:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail='User not found')
-    return user
 
