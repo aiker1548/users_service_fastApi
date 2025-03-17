@@ -1,6 +1,4 @@
-import bcrypt
-import secrets
-import string
+from typing import List
 
 from pydantic import BaseModel, EmailStr, validator
 
@@ -38,3 +36,7 @@ class UserResponseWithToken(BaseModel):
 class UserToken(BaseModel):
     username: str
     password: str
+
+
+class UserIdsRequest(BaseModel):
+    user_ids: List[int]

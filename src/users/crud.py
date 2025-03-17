@@ -35,6 +35,14 @@ async def get_users(db: AsyncSession) -> list[User]:
     return result
 
 
+async def get_users_by_ids(db: AsyncSession, user_ids: list):
+    # Выполняем запрос для получения пользователей с переданными id
+    result = await db.execute(
+        select(User).filter(User.id.in_(user_ids))  # Получаем пользователей по списку ID
+    )
+    # Возвращаем результаты
+    return result.scalars().all()  # Возвращаем список пользователей
+
 # async def get_current_user(db: AsyncSession, token: str = Depends(oauth2_scheme)): 
 #     payload = verify_access_token(token)
 #     if payload is None:

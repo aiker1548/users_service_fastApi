@@ -1,9 +1,9 @@
 from fastapi import APIRouter, status, HTTPException, Depends
 
-from src.users.schemas import User, UserOut, UserResponseWithToken, UserToken
+from src.users.schemas import User, UserOut, UserResponseWithToken, UserToken, UserIdsRequest
 from src.database.core import DbSession
-from src.users.crud import Current_user, get_user_by_username, get_users, create_user
-
+from src.users.crud import Current_user, get_user_by_username, get_users as get_users_service, create_user
+from src.users.crud import get_users_by_ids
 router = APIRouter()
 
 
@@ -31,7 +31,7 @@ async def get_user_by_name(db_session: DbSession, username: str):
     
 @router.get("/users/", response_model=list[UserOut], status_code=status.HTTP_200_OK)
 async def get_users(db_session: DbSession):
-    users = await get_users(db_session)
+    users = await get_users_service(db_session)
     return users.scalars().all()
 
 
@@ -54,3 +54,9 @@ async def get_token(db_session: DbSession, user_data: UserToken):
 @router.get('/users/me/', response_model=UserOut, status_code=status.HTTP_200_OK)
 async def get_me(user: Current_user):
     return user
+
+
+@router.post('/users/batch/', response_model=list[UserOut], status_code=status.HTTP_200_OK)
+async def get_batch_users(db_session: DbSession, request: UserIdsRequest):
+    users = await get_users_by_ids(db_session, request.user_ids)
+    return users
