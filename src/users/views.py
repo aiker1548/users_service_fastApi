@@ -15,7 +15,7 @@ async def register_user(db_session: DbSession, user: User):
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Username already registered"
         )
-    created_user = await create_user(db=db_session, username=user.username, email=user.email, password=user.password_hash)
+    created_user = await create_user(db=db_session, username=user.username, email=user.email, password=user.password)
     token = created_user.token
     return {"user": created_user, "access_token": token}
 
